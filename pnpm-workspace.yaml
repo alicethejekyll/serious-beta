@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: true
+  embedded-postgres: true
+  '@embedded-postgres/darwin-arm64': true
+  '@embedded-postgres/darwin-x64': true
+  '@embedded-postgres/linux-x64': true
+  '@embedded-postgres/linux-arm64': true
+overrides:
+  'ansi-regex@5.0.0': 5.0.1

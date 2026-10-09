@@ -1,0 +1,24 @@
+{
+  "envId": "REPLACE_WITH_MAINLAND_PG_TEST_ENV_ID",
+  "framework": {
+    "name": "renzhen-private-beta",
+    "plugins": {
+      "run": {
+        "name": "@cloudbase/framework-plugin-run",
+        "options": {
+          "serviceName": "renzhen-beta-test",
+          "servicePath": "/",
+          "localPath": "./",
+          "dockerfile": "./Dockerfile",
+          "buildDir": "./",
+          "cpu": 0.25,
+          "mem": 0.5,
+          "minNum": 1,
+          "maxNum": 2,
+          "containerPort": 8080,
+          "envVariables": {"NODE_ENV":"production","PORT":"8080","DATA_MODE":"mock","LAUNCH_APPROVED":"false"}
+        }
+      }
+    }
+  }
+}

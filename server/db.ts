@@ -1,0 +1,6 @@
+import pg from 'pg';import type { Config } from './config.js';
+export type DB=pg.Pool;export type SQL=pg.PoolClient;
+export function poolFor(c:Config){return new pg.Pool({connectionString:c.databaseUrl,max:8,connectionTimeoutMillis:5000,idleTimeoutMillis:30000,ssl:c.production?{rejectUnauthorized:true,ca:c.databaseCa}:false});}
+const roles={user:'rr_user',admin:'rr_admin',auth:'rr_auth',maintenance:'rr_maintenance'} as const;
+export async function tx<T>(pool:DB,role:keyof typeof roles,userId:string|undefined,fn:(db:SQL)=>Promise<T>){const db=await pool.connect();try{await db.query('BEGIN');await db.query(`SET LOCAL ROLE ${roles[role]}`);await db.query("SELECT set_config('rr.user_id',$1,true)",[userId||'']);const result=await fn(db);await db.query('COMMIT');return result;}catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}}
+export async function assertRuntimeRole(pool:DB){const r=await pool.query("SELECT rolname,rolsuper,rolbypassrls,rolinherit FROM pg_roles WHERE rolname=current_user");const role=r.rows[0];if(role.rolname!=='rr_runtime'||role.rolsuper||role.rolbypassrls||role.rolinherit)throw new Error('Runtime must use restricted rr_runtime NOINHERIT account');const own=await pool.query("SELECT 1 FROM pg_tables WHERE schemaname='rr' AND tableowner=current_user");if(own.rowCount)throw new Error('Runtime must not own tables');}

@@ -1,0 +1,1 @@
+export const sample={age:28,gender:'女性',seeking:['男性'],age_min:25,age_max:35,relationship:'长期且排他的恋爱关系',match_accept:'愿意',values_honesty:5,values_independence:3,values_growth:4,future_city:'上海',future_children:'尚未确定',intimacy_space:3,intimacy_expression:4,communication:'先冷静再讨论',communication_checkin:5,interests:['阅读与电影','运动与户外'],sleep:'偏早睡早起',social:'安排一些活动',pets:'否'};
